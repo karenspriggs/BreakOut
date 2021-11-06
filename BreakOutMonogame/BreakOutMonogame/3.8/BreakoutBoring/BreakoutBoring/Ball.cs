@@ -24,8 +24,10 @@ namespace BreakoutBoring
         int offset;
         int speed;
         public int addspeed;
-        Vector2 LaunchDirection = new Vector2(1, -1);
+        public int previousspeed;
 
+        Vector2 LaunchDirection = new Vector2(1, -1);
+        
         public Ball(Game game, ScoreManager sc)
             : base(game)
         {
@@ -33,6 +35,7 @@ namespace BreakoutBoring
             this.offset = 50;
             this.speed = 190;
             this.addspeed = 50;
+            this.previousspeed = speed;
             this.autopaddle = false;
             this.sc = sc;
             //Lazy load GameConsole

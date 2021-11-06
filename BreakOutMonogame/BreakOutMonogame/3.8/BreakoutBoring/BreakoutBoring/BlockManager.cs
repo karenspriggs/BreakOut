@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGameLibrary.Util;
 
 namespace BreakoutBoring
 {
@@ -15,7 +16,10 @@ namespace BreakoutBoring
 
         ScoreManager sc;
         Random rand;
-
+        GameEnd ge;
+        InputHandler input;
+        
+        bool continuees;
         int brokencount;
         int blockcount;
 
@@ -32,16 +36,22 @@ namespace BreakoutBoring
         /// </summary>
         /// <param name="game">Reference to Game</param>
         /// <param name="ball">Refernce to Ball for collision</param>
-        public BlockManager(Game game, Ball b, ScoreManager sb)
+        public BlockManager(Game game, Ball b, ScoreManager sb, GameEnd ge)
             : base(game)
         {
             this.Blocks = new List<MonogameBlock>();
             this.blocksToRemove = new List<MonogameBlock>();
             this.sc = sb;
+            this.ge = ge;
+            this.ball = b;
+            ge.b = b;
+            continuees = true;
+            input = (InputHandler)game.Services.GetService(typeof(IInputHandler));
+
             rand = new Random();
             deathblockamount = 0;
             deathblockcount = 5;
-            this.ball = b;
+
         }
 
         public override void Initialize()
@@ -78,6 +88,7 @@ namespace BreakoutBoring
         }
         
         bool reflected; //the ball should only reflect once even if it hits two bricks
+
         public override void Update(GameTime gameTime)
         {
             this.reflected = false; //only reflect once per update
@@ -85,6 +96,17 @@ namespace BreakoutBoring
             UpdateBlocks(gameTime);
             UpdateRemoveDisabledBlocks();
             
+            if (ge.lost)
+            {
+                TrashWholeLevelLMFAO();
+                ge.lost = false;
+            }
+
+            if (!continuees)
+            {
+                MakeNewLevel();
+                continuees = true;
+            }
 
             base.Update(gameTime);
         }
@@ -164,6 +186,11 @@ namespace BreakoutBoring
         public void MakeBlock(int w, int h, int margin)
         {
             MonogameBlock b;
+            b = new DeathBlock(this.Game, sc.ge);
+            b.Initialize();
+            b.Location = new Vector2(5 + (w * b.SpriteTexture.Width + (w * margin)), 50 + (h * b.SpriteTexture.Height + (h * margin)));
+            Blocks.Add(b);
+            deathblockamount++;
             /**
             if (DetermineRandom() && deathblockamount < deathblockcount)
             {
@@ -180,11 +207,24 @@ namespace BreakoutBoring
                 Blocks.Add(b);
             }
             **/
-            b = new DeathBlock(this.Game, sc.ge);
-            b.Initialize();
-            b.Location = new Vector2(5 + (w * b.SpriteTexture.Width + (w * margin)), 50 + (h * b.SpriteTexture.Height + (h * margin)));
-            Blocks.Add(b);
-            deathblockamount++;
+        }
+
+        public void TrashWholeLevelLMFAO()
+        {
+            Blocks.Clear();
+            continuees = false;
+        }
+
+        public void MakeNewLevel()
+        {
+            if (input.KeyboardState.IsKeyDown(Keys.Space))
+            {
+                CreateBlockArrayByWidthAndHeight(24, 2, 1);
+                brokencount = 0;
+                ball.Speed = ball.previousspeed;
+                ge.result = "";
+                ball.Speed = ball.previousspeed;
+            }
         }
 
         public bool DetermineRandom()

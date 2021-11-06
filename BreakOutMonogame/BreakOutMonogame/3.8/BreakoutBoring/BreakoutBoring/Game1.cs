@@ -38,19 +38,21 @@ namespace BreakoutBoring
 #endif
             this.Components.Add(input);
 
-            ge = new GameEnd(this, ball, paddle);
+            //GameComponents
+
+            ge = new GameEnd(this);
             this.Components.Add(ge);
 
             score = new ScoreManager(this, ge);
             this.Components.Add(score);
-
-            //GameComponents
+           
             ball = new Ball(this, score); //Ball first paddle and block manager depend on ball
             this.Components.Add(ball);
+
             paddle = new Paddle(this, ball);
             this.Components.Add(paddle);
             
-            bm = new BlockManager(this, ball, score);
+            bm = new BlockManager(this, ball, score, ge);
             this.Components.Add(bm);
         }
 

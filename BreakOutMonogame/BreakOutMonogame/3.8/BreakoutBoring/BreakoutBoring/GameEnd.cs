@@ -16,17 +16,17 @@ namespace BreakoutBoring
     {
         SpriteBatch sb;
         SpriteFont font;
-        string result;
+        public string result;
         Vector2 resultpos;
         int offset;
-        Ball b;
-        Paddle p;
+        public Ball b;
 
-        public GameEnd(Game game, Ball b, Paddle p): base(game)
+        public bool lost;
+
+        public GameEnd(Game game): base(game)
         {
-            this.p = p;
-            this.b = b;
             offset = 100;
+            lost = false;
         }
 
         protected override void LoadContent()
@@ -47,8 +47,8 @@ namespace BreakoutBoring
         public void Lose()
         {
             b.Speed = 0;
-            p.Speed = 0;
             result = "You lose and suck";
+            lost = true;
         }
 
         public void Win()
