@@ -5,9 +5,6 @@ using MonoGameLibrary.Util;
 
 namespace BreakoutBoring
 {
-    /// <summary>
-    /// This is the main type for your game
-    /// </summary>
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
@@ -24,6 +21,7 @@ namespace BreakoutBoring
         Ball ball;
 
         ScoreManager score;
+        GameEnd ge;
 
         public Game1()
             : base()
@@ -40,7 +38,10 @@ namespace BreakoutBoring
 #endif
             this.Components.Add(input);
 
-            score = new ScoreManager(this);
+            ge = new GameEnd(this, ball, paddle);
+            this.Components.Add(ge);
+
+            score = new ScoreManager(this, ge);
             this.Components.Add(score);
 
             //GameComponents

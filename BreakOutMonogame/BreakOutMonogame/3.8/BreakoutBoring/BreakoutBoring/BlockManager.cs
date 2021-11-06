@@ -37,9 +37,10 @@ namespace BreakoutBoring
         {
             this.Blocks = new List<MonogameBlock>();
             this.blocksToRemove = new List<MonogameBlock>();
+            this.sc = sb;
             rand = new Random();
             deathblockamount = 0;
-            deathblockcount = 1;
+            deathblockcount = 5;
             this.ball = b;
         }
 
@@ -163,13 +164,14 @@ namespace BreakoutBoring
         public void MakeBlock(int w, int h, int margin)
         {
             MonogameBlock b;
-
-            if (DetermineRandom() && deathblockamount > deathblockcount)
+            /**
+            if (DetermineRandom() && deathblockamount < deathblockcount)
             {
-                b = new DeathBlock(this.Game);
+                b = new DeathBlock(this.Game, sc.ge);
                 b.Initialize();
                 b.Location = new Vector2(5 + (w * b.SpriteTexture.Width + (w * margin)), 50 + (h * b.SpriteTexture.Height + (h * margin)));
                 Blocks.Add(b);
+                deathblockamount++;
             } else
             {
                 b = new MonogameBlock(this.Game);
@@ -177,11 +179,18 @@ namespace BreakoutBoring
                 b.Location = new Vector2(5 + (w * b.SpriteTexture.Width + (w * margin)), 50 + (h * b.SpriteTexture.Height + (h * margin)));
                 Blocks.Add(b);
             }
+            **/
+            b = new DeathBlock(this.Game, sc.ge);
+            b.Initialize();
+            b.Location = new Vector2(5 + (w * b.SpriteTexture.Width + (w * margin)), 50 + (h * b.SpriteTexture.Height + (h * margin)));
+            Blocks.Add(b);
+            deathblockamount++;
         }
 
         public bool DetermineRandom()
         {
             int numb = rand.Next(0, 5);
+
             if (numb == 1)
             {
                 return true;

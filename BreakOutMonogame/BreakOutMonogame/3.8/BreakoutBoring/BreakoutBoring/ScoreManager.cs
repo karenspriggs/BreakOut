@@ -23,11 +23,14 @@ namespace BreakoutBoring
 
         SpriteBatch sb;
         Vector2 scoreLoc, livesLoc, levelLoc; //Locations to draw GUI elements
-        
-        public ScoreManager(Game game)
+
+        public GameEnd ge;
+
+        public ScoreManager(Game game, GameEnd ge)
             : base(game)
         {
             SetupNewGame();
+            this.ge = ge;
         }
 
 

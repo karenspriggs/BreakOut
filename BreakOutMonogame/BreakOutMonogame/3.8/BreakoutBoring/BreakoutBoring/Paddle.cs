@@ -11,7 +11,7 @@ using MonoGameLibrary.Util;
 
 namespace BreakoutBoring
 {
-    class Paddle : DrawableSprite
+    public class Paddle : DrawableSprite
     {
         //Service Dependencies
         GameConsole console;
