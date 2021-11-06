@@ -38,10 +38,16 @@ namespace BreakoutBoring
             //TODO add mouse controll?
 
             //Up launches ball
-            if (input.KeyboardState.WasKeyPressed(Keys.Up))
+            // Added space since I prefer it
+            if (input.KeyboardState.WasKeyPressed(Keys.Up) || input.KeyboardState.WasKeyPressed(Keys.Space))
             {
                 if (ball.State == BallState.OnPaddleStart) //Only Launch Ball is it's on paddle
                     this.ball.LaunchBall(gametime);
+            }
+
+            if (input.KeyboardState.WasKeyPressed(Keys.X))
+            {
+                ball.autopaddle = !ball.autopaddle;
             }
         }
     }

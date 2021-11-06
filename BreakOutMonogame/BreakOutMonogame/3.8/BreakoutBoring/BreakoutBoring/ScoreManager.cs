@@ -12,13 +12,12 @@ using MonoGameLibrary.Util;
 
 namespace BreakoutBoring
 {
-    class ScoreManager : DrawableGameComponent
+    public class ScoreManager : DrawableGameComponent
     {
-
         SpriteFont font;
-        public static int Lives;    
-        public static int Level;
-        public static int Score;
+        public int Lives;    
+        public int Level;
+        public int Score;
 
         Texture2D paddle;   //Texture for drawing lives left scoremanager is also the GUI/HUD
 
@@ -33,7 +32,7 @@ namespace BreakoutBoring
         }
 
 
-        private static void SetupNewGame()  //Generally mixing static and non static methods is messy be careful
+        private void SetupNewGame()  //Generally mixing static and non static methods is messy be careful
         {
             Lives = 3;
             Level = 1;

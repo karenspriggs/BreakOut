@@ -44,12 +44,12 @@ namespace BreakoutBoring
             this.Components.Add(score);
 
             //GameComponents
-            ball = new Ball(this); //Ball first paddle and block manager depend on ball
+            ball = new Ball(this, score); //Ball first paddle and block manager depend on ball
             this.Components.Add(ball);
             paddle = new Paddle(this, ball);
             this.Components.Add(paddle);
             
-            bm = new BlockManager(this, ball);
+            bm = new BlockManager(this, ball, score);
             this.Components.Add(bm);
         }
 

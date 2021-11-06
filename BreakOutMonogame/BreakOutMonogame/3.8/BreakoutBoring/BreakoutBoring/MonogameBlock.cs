@@ -33,7 +33,6 @@ namespace BreakoutBoring
 
         protected virtual void updateBlockTexture()
         {
-
             this.blockstate = this.block.BlockState;
             switch (block.BlockState)
             {
@@ -48,7 +47,6 @@ namespace BreakoutBoring
                     this.spriteTexture = NormalTexture;
                     //this.enabled = false;
                     this.Visible = false; //don't show block
-
                     break;
             }
         }

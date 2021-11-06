@@ -14,7 +14,7 @@ namespace BreakoutBoring
 
     public class Block
     {
-        protected int hitCount; //Future use maybe should change state?
+        protected int hitCount; 
         protected uint blockID;
 
         protected static uint blockCount;

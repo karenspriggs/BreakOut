@@ -19,14 +19,12 @@ namespace BreakoutBoring
         //Dependencies
         PaddleController controller;
         Ball ball;      //Need reference to ball for collision
-
-        bool autopaddle;  //cheat
+        int offset;
         
         public Paddle(Game game, Ball b)
             : base(game)
         {
-
-            this.autopaddle = true;
+            this.offset = 50;
             this.Speed = 200;
             this.ball = b;
             controller = new PaddleController(game, ball);
@@ -54,7 +52,7 @@ namespace BreakoutBoring
 
         public void SetInitialLocation()
         {
-            this.Location = new Vector2(300, 450); //Shouldn't hard code inital position TODO set to be realtive to windows size
+            this.Location = new Vector2(this.Game.GraphicsDevice.Viewport.Width/2, this.Game.GraphicsDevice.Viewport.Width/2+ offset); 
 
         }
 
@@ -85,7 +83,7 @@ namespace BreakoutBoring
 
             KeepPaddleOnScreen();
 
-            if(autopaddle && ball.State == BallState.Playing) //Alllow cheating
+            if(ball.autopaddle && ball.State == BallState.Playing) //Alllow cheating
             {
                 this.Location.X = ball.Location.X - ((int)this.spriteTexture.Width/2 * this.scale);
             }

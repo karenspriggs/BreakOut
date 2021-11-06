@@ -16,16 +16,25 @@ namespace BreakoutBoring
 
     public class Ball : DrawableSprite
     {
-        
         public BallState State { get; private set; }
-
+        public bool autopaddle;
         GameConsole console;
+        ScoreManager sc;
 
-        public Ball(Game game)
+        int offset;
+        int speed;
+        public int addspeed;
+        Vector2 LaunchDirection = new Vector2(1, -1);
+
+        public Ball(Game game, ScoreManager sc)
             : base(game)
         {
             this.State = BallState.OnPaddleStart;
-
+            this.offset = 50;
+            this.speed = 190;
+            this.addspeed = 50;
+            this.autopaddle = false;
+            this.sc = sc;
             //Lazy load GameConsole
             console = (GameConsole)this.Game.Services.GetService(typeof(IGameConsole));
             if (console == null) //ohh no no console let's add a new one
@@ -40,13 +49,13 @@ namespace BreakoutBoring
 
         public void SetInitialLocation()
         {
-            this.Location = new Vector2(200, 300); //Hard coded position TODO fix this
+            this.Location = new Vector2(this.Game.GraphicsDevice.Viewport.Width / 2, this.Game.GraphicsDevice.Viewport.Width / 2+ offset); 
         }
 
         public void LaunchBall(GameTime gameTime)
         {
-            this.Speed = 190; //hard coded speed TODO fix this
-            this.Direction = new Vector2(1, -1); //hard coded launch direction TODO fix this
+            this.Speed = speed; 
+            this.Direction = LaunchDirection; 
             this.State = BallState.Playing;
             this.console.GameConsoleWrite("Ball Launched " + gameTime.TotalGameTime.ToString());
         }
@@ -63,6 +72,7 @@ namespace BreakoutBoring
             this.Speed = 0;
             this.State =  BallState.OnPaddleStart;
             this.console.GameConsoleWrite("Ball Reset " + gameTime.TotalGameTime.ToString());
+            sc.Lives--;
         }
 
         public override void Update(GameTime gameTime)
@@ -92,6 +102,7 @@ namespace BreakoutBoring
             {
                 this.Direction.X *= -1;
             }
+
             //bottom Miss
             if (this.Location.Y + this.spriteTexture.Height > this.Game.GraphicsDevice.Viewport.Height)
             {
@@ -108,7 +119,7 @@ namespace BreakoutBoring
         public void Reflect(MonogameBlock block)
         {
             this.Direction.Y *= -1; //TODO check for side collision with block
+            sc.Score++;
         }
-
     }
 }

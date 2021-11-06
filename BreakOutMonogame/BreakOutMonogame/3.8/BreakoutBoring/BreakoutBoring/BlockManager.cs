@@ -11,8 +11,11 @@ namespace BreakoutBoring
 {
     class BlockManager : DrawableGameComponent
     {
-        public List<MonogameBlock> Blocks { get; private set; } //List of Blocks the are managed by Block Manager
+        public List<MonogameBlock> Blocks { get; private set; } //List of Blocks the are managed by Block Manager\
 
+        ScoreManager sc;
+        int brokencount;
+        int blockcount;
         //Dependancy on Ball
         Ball ball;
 
@@ -23,7 +26,7 @@ namespace BreakoutBoring
         /// </summary>
         /// <param name="game">Reference to Game</param>
         /// <param name="ball">Refernce to Ball for collision</param>
-        public BlockManager(Game game, Ball b)
+        public BlockManager(Game game, Ball b, ScoreManager sb)
             : base(game)
         {
             this.Blocks = new List<MonogameBlock>();
@@ -66,6 +69,7 @@ namespace BreakoutBoring
                     Blocks.Add(b);
                 }
             }
+            blockcount = Blocks.Count;
         }
         
         bool reflected; //the ball should only reflect once even if it hits two bricks
@@ -97,8 +101,19 @@ namespace BreakoutBoring
             foreach (var block in blocksToRemove)
             {
                 Blocks.Remove(block);
-                ScoreManager.Score++;
+                
+                brokencount++;
             }
+
+            //check to respawn all blocks
+            if (brokencount == blockcount)
+            {
+                CreateBlockArrayByWidthAndHeight(24, 2, 1);
+                brokencount = 0;
+                sc.Level++;
+                ball.Speed += ball.addspeed;
+            }
+
             blocksToRemove.Clear();
         }
 
