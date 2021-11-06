@@ -14,8 +14,14 @@ namespace BreakoutBoring
         public List<MonogameBlock> Blocks { get; private set; } //List of Blocks the are managed by Block Manager\
 
         ScoreManager sc;
+        Random rand;
+
         int brokencount;
         int blockcount;
+
+        int deathblockamount;
+        int deathblockcount;
+
         //Dependancy on Ball
         Ball ball;
 
@@ -31,7 +37,9 @@ namespace BreakoutBoring
         {
             this.Blocks = new List<MonogameBlock>();
             this.blocksToRemove = new List<MonogameBlock>();
-            
+            rand = new Random();
+            deathblockamount = 0;
+            deathblockcount = 1;
             this.ball = b;
         }
 
@@ -57,16 +65,12 @@ namespace BreakoutBoring
         /// <param name="margin">space between blocks</param>
         private void CreateBlockArrayByWidthAndHeight(int width, int height, int margin)
         {
-            MonogameBlock b;
             //Create Block Array based on with and hieght
             for (int w = 0; w < width; w++)
             {
                 for (int h = 0; h < height; h++)
                 {
-                    b = new MonogameBlock(this.Game);
-                    b.Initialize();
-                    b.Location = new Vector2(5 + (w * b.SpriteTexture.Width + (w * margin)), 50 + (h * b.SpriteTexture.Height + (h * margin)));
-                    Blocks.Add(b);
+                    MakeBlock(w, h, margin);
                 }
             }
             blockcount = Blocks.Count;
@@ -111,6 +115,7 @@ namespace BreakoutBoring
                 CreateBlockArrayByWidthAndHeight(24, 2, 1);
                 brokencount = 0;
                 sc.Level++;
+                deathblockcount++;
                 ball.Speed += ball.addspeed;
             }
 
@@ -153,6 +158,36 @@ namespace BreakoutBoring
                     block.Draw(gameTime);
             }
             base.Draw(gameTime);
+        }
+
+        public void MakeBlock(int w, int h, int margin)
+        {
+            MonogameBlock b;
+
+            if (DetermineRandom() && deathblockamount > deathblockcount)
+            {
+                b = new DeathBlock(this.Game);
+                b.Initialize();
+                b.Location = new Vector2(5 + (w * b.SpriteTexture.Width + (w * margin)), 50 + (h * b.SpriteTexture.Height + (h * margin)));
+                Blocks.Add(b);
+            } else
+            {
+                b = new MonogameBlock(this.Game);
+                b.Initialize();
+                b.Location = new Vector2(5 + (w * b.SpriteTexture.Width + (w * margin)), 50 + (h * b.SpriteTexture.Height + (h * margin)));
+                Blocks.Add(b);
+            }
+        }
+
+        public bool DetermineRandom()
+        {
+            int numb = rand.Next(0, 5);
+            if (numb == 1)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

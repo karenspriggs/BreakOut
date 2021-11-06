@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+
 
 namespace BreakoutBoring
 {
-    class DeathBlock: Block
+    class DeathBlock: MonogameBlock
     {
-        public DeathBlock(): base()
+        public DeathBlock(Game game): base(game)
         {
             
-        }
-
-        public void Die()
-        {
-
         }
     }
 }
