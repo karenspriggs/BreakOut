@@ -21,10 +21,13 @@ namespace BreakoutBoring
         GameConsole console;
         ScoreManager sc;
 
-        int offset;
+        int offsetX;
+        int offsetY;
         int speed;
         public int addspeed;
         public int previousspeed;
+
+        public Vector2 startinglocation;
 
         Vector2 LaunchDirection = new Vector2(1, -1);
         
@@ -32,12 +35,14 @@ namespace BreakoutBoring
             : base(game)
         {
             this.State = BallState.OnPaddleStart;
-            this.offset = 50;
+            this.offsetX = 80;
+            this.offsetY = 200;
             this.speed = 190;
             this.addspeed = 50;
             this.previousspeed = speed;
             this.autopaddle = false;
             this.sc = sc;
+            this.startinglocation = new Vector2();
             //Lazy load GameConsole
             console = (GameConsole)this.Game.Services.GetService(typeof(IGameConsole));
             if (console == null) //ohh no no console let's add a new one
@@ -52,7 +57,8 @@ namespace BreakoutBoring
 
         public void SetInitialLocation()
         {
-            this.Location = new Vector2(this.Game.GraphicsDevice.Viewport.Width / 2, this.Game.GraphicsDevice.Viewport.Width / 2+ offset); 
+            this.Location = new Vector2(this.Game.GraphicsDevice.Viewport.Width / 2 - offsetX, this.Game.GraphicsDevice.Viewport.Height / 2+ offsetY);
+            this.startinglocation = Location;
         }
 
         public void LaunchBall(GameTime gameTime)
@@ -60,7 +66,7 @@ namespace BreakoutBoring
             this.Speed = speed; 
             this.Direction = LaunchDirection; 
             this.State = BallState.Playing;
-            this.console.GameConsoleWrite("Ball Launched " + gameTime.TotalGameTime.ToString());
+            //this.console.GameConsoleWrite("Ball Launched " + gameTime.TotalGameTime.ToString());
         }
 
         protected override void LoadContent()
@@ -74,7 +80,7 @@ namespace BreakoutBoring
         {
             this.Speed = 0;
             this.State =  BallState.OnPaddleStart;
-            this.console.GameConsoleWrite("Ball Reset " + gameTime.TotalGameTime.ToString());
+            //this.console.GameConsoleWrite("Ball Reset " + gameTime.TotalGameTime.ToString());
             sc.Lives--;
         }
 

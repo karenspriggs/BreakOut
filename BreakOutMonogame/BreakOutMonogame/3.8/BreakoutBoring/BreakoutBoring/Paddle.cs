@@ -19,12 +19,14 @@ namespace BreakoutBoring
         //Dependencies
         PaddleController controller;
         Ball ball;      //Need reference to ball for collision
-        int offset;
-        
+        int offsetX;
+        int offsetY;
+
         public Paddle(Game game, Ball b)
             : base(game)
         {
-            this.offset = 50;
+            this.offsetX = 80;
+            this.offsetY = 200;
             this.Speed = 200;
             this.ball = b;
             controller = new PaddleController(game, ball);
@@ -52,7 +54,7 @@ namespace BreakoutBoring
 
         public void SetInitialLocation()
         {
-            this.Location = new Vector2(this.Game.GraphicsDevice.Viewport.Width/2, this.Game.GraphicsDevice.Viewport.Width/2+ offset); 
+            this.Location = new Vector2(this.Game.GraphicsDevice.Viewport.Width / 2 - offsetX, this.Game.GraphicsDevice.Viewport.Height / 2 + offsetY); 
 
         }
 
@@ -108,7 +110,7 @@ namespace BreakoutBoring
                 ball.Direction.Y *= -1;
                 UpdateBallCollisionBasedOnPaddleImpactLocation();
                 UpdateBallCollisionRandomFuness();
-                console.GameConsoleWrite("Paddle collision ballLoc:" + ball.Location + " paddleLoc:" + this.Location.ToString());
+                //console.GameConsoleWrite("Paddle collision ballLoc:" + ball.Location + " paddleLoc:" + this.Location.ToString());
             }
         }
 
@@ -151,16 +153,16 @@ namespace BreakoutBoring
 
             if ((ball.Location.X > this.Location.X) && (ball.Location.X < this.Location.X + this.spriteTexture.Width / 3))
             {
-                console.GameConsoleWrite("1st Third");
+                //console.GameConsoleWrite("1st Third");
                 ball.Direction.X += .1f;
             }
             if ((ball.Location.X > this.Location.X + (this.spriteTexture.Width / 3)) && (ball.Location.X < this.Location.X + (this.spriteTexture.Width / 3) * 2))
             {
-                console.GameConsoleWrite("2nd third");
+                //console.GameConsoleWrite("2nd third");
             }
             if ((ball.Location.X > (this.Location.X + (this.spriteTexture.Width / 3) * 2)) && (ball.Location.X < this.Location.X + (this.spriteTexture.Width)))
             {
-                console.GameConsoleWrite("3rd third");
+                //console.GameConsoleWrite("3rd third");
                 ball.Direction.X -= .1f;
             }
         }

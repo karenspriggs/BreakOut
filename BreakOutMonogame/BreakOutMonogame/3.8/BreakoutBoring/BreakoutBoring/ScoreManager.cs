@@ -18,11 +18,13 @@ namespace BreakoutBoring
         public int Lives;    
         public int Level;
         public int Score;
+        int offsetX;
+        int offsetY;
 
         Texture2D paddle;   //Texture for drawing lives left scoremanager is also the GUI/HUD
 
         SpriteBatch sb;
-        Vector2 scoreLoc, livesLoc, levelLoc; //Locations to draw GUI elements
+        Vector2 scoreLoc, livesLoc, levelLoc, rulesLoc; //Locations to draw GUI elements
 
         public GameEnd ge;
 
@@ -31,10 +33,11 @@ namespace BreakoutBoring
         {
             SetupNewGame();
             this.ge = ge;
+            offsetX = 100;
+            offsetY = 80;
         }
 
-
-        private void SetupNewGame()  //Generally mixing static and non static methods is messy be careful
+        public void SetupNewGame()  //Generally mixing static and non static methods is messy be careful
         {
             Lives = 3;
             Level = 1;
@@ -46,9 +49,10 @@ namespace BreakoutBoring
             sb = new SpriteBatch(this.Game.GraphicsDevice);
             font = this.Game.Content.Load<SpriteFont>("Arial");
             paddle = this.Game.Content.Load<Texture2D>("paddleSmall");
-            livesLoc = new Vector2(10, 10); //Hard coded locations TODO fix for locations relative to window size
-            levelLoc = new Vector2(300, 10);
-            scoreLoc = new Vector2(400, 10);
+            livesLoc = new Vector2(this.Game.GraphicsDevice.Viewport.Width / 25, this.Game.GraphicsDevice.Viewport.Height / 25); //Hard coded locations TODO fix for locations relative to window size
+            levelLoc = new Vector2(this.Game.GraphicsDevice.Viewport.Height / 2+50, this.Game.GraphicsDevice.Viewport.Height / 25);
+            scoreLoc = new Vector2(this.Game.GraphicsDevice.Viewport.Height / 2 + 400, this.Game.GraphicsDevice.Viewport.Height / 25);
+            rulesLoc = new Vector2(this.Game.GraphicsDevice.Viewport.Width / 2 - offsetX, this.Game.GraphicsDevice.Viewport.Height / 2 - offsetY);
             base.LoadContent();
         }
 
@@ -61,7 +65,8 @@ namespace BreakoutBoring
             }
             sb.DrawString(font, "Lives: " + Lives, livesLoc, Color.White);
             sb.DrawString(font, "Score: " + Score, scoreLoc, Color.White);
-            sb.DrawString(font, "Level: " + Level, levelLoc, Color.White); 
+            sb.DrawString(font, "Level: " + Level, levelLoc, Color.White);
+            sb.DrawString(font, "Press enter to shoot ball\nPress x to turn on easy mode\nIf you kill a green block you lose", rulesLoc, Color.White);
             sb.End();
             base.Draw(gameTime);
         }

@@ -17,7 +17,7 @@ namespace BreakoutBoring
         ScoreManager sc;
         Random rand;
         GameEnd ge;
-        InputHandler input;
+        BlockManagerInput input;
         
         bool continuees;
         int brokencount;
@@ -46,8 +46,8 @@ namespace BreakoutBoring
             this.ball = b;
             ge.b = b;
             continuees = true;
-            input = (InputHandler)game.Services.GetService(typeof(IInputHandler));
 
+            input = new BlockManagerInput(game);
             rand = new Random();
             deathblockamount = 0;
             deathblockcount = 5;
@@ -84,7 +84,7 @@ namespace BreakoutBoring
                     MakeBlock(w, h, margin);
                 }
             }
-            blockcount = Blocks.Count;
+            blockcount = Blocks.Count - deathblockcount;
         }
         
         bool reflected; //the ball should only reflect once even if it hits two bricks
@@ -95,11 +95,15 @@ namespace BreakoutBoring
             UpdateCheckBlocksForCollision(gameTime);
             UpdateBlocks(gameTime);
             UpdateRemoveDisabledBlocks();
-            
+
             if (ge.lost)
             {
-                TrashWholeLevelLMFAO();
-                ge.lost = false;
+                if (input.IsEnterPressed(gameTime))
+                {
+                    TrashWholeLevelLMFAO();
+                    MakeNewLevel();
+                    ge.lost = false;
+                }
             }
 
             if (!continuees)
@@ -186,12 +190,7 @@ namespace BreakoutBoring
         public void MakeBlock(int w, int h, int margin)
         {
             MonogameBlock b;
-            b = new DeathBlock(this.Game, sc.ge);
-            b.Initialize();
-            b.Location = new Vector2(5 + (w * b.SpriteTexture.Width + (w * margin)), 50 + (h * b.SpriteTexture.Height + (h * margin)));
-            Blocks.Add(b);
-            deathblockamount++;
-            /**
+
             if (DetermineRandom() && deathblockamount < deathblockcount)
             {
                 b = new DeathBlock(this.Game, sc.ge);
@@ -206,7 +205,6 @@ namespace BreakoutBoring
                 b.Location = new Vector2(5 + (w * b.SpriteTexture.Width + (w * margin)), 50 + (h * b.SpriteTexture.Height + (h * margin)));
                 Blocks.Add(b);
             }
-            **/
         }
 
         public void TrashWholeLevelLMFAO()
@@ -217,14 +215,13 @@ namespace BreakoutBoring
 
         public void MakeNewLevel()
         {
-            if (input.KeyboardState.IsKeyDown(Keys.Space))
-            {
-                CreateBlockArrayByWidthAndHeight(24, 2, 1);
-                brokencount = 0;
-                ball.Speed = ball.previousspeed;
-                ge.result = "";
-                ball.Speed = ball.previousspeed;
-            }
+            CreateBlockArrayByWidthAndHeight(24, 2, 1);
+            brokencount = 0;
+            ball.Speed = ball.previousspeed;
+            ge.result = "";
+            ball.Speed = ball.previousspeed;
+            ball.Location = ball.startinglocation;
+            sc.SetupNewGame();
         }
 
         public bool DetermineRandom()
