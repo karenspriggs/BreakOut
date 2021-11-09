@@ -27,7 +27,7 @@ namespace BreakoutBoring
         {
             this.offsetX = 80;
             this.offsetY = 200;
-            this.Speed = 200;
+            this.Speed = 300;
             this.ball = b;
             controller = new PaddleController(game, ball);
 

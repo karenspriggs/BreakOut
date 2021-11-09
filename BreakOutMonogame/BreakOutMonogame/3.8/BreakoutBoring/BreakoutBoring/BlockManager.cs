@@ -51,7 +51,6 @@ namespace BreakoutBoring
             rand = new Random();
             deathblockamount = 0;
             deathblockcount = 5;
-
         }
 
         public override void Initialize()
@@ -96,14 +95,22 @@ namespace BreakoutBoring
             UpdateBlocks(gameTime);
             UpdateRemoveDisabledBlocks();
 
+            // This is in the blockmanager class since it respawns the level when the player loses, also the block manager class has a ball 
             if (ge.lost)
             {
                 if (input.IsEnterPressed(gameTime))
                 {
                     TrashWholeLevelLMFAO();
+                    
                     MakeNewLevel();
                     ge.lost = false;
                 }
+            }
+
+            if (ball.lost)
+            {
+                ball.lost = false;
+                ge.Lose();
             }
 
             if (!continuees)
@@ -215,10 +222,14 @@ namespace BreakoutBoring
 
         public void MakeNewLevel()
         {
+            deathblockamount = 0;
             CreateBlockArrayByWidthAndHeight(24, 2, 1);
             brokencount = 0;
             ball.Speed = ball.previousspeed;
             ge.result = "";
+            sc.Lives = 4;
+            sc.Score = 0;
+            sc.Level = 1;
             ball.Speed = ball.previousspeed;
             ball.Location = ball.startinglocation;
             sc.SetupNewGame();

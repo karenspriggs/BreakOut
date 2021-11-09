@@ -66,7 +66,7 @@ namespace BreakoutBoring
             sb.DrawString(font, "Lives: " + Lives, livesLoc, Color.White);
             sb.DrawString(font, "Score: " + Score, scoreLoc, Color.White);
             sb.DrawString(font, "Level: " + Level, levelLoc, Color.White);
-            sb.DrawString(font, "Press enter to shoot ball\nPress x to turn on easy mode\nIf you kill a green block you lose", rulesLoc, Color.White);
+            sb.DrawString(font, "Press space to shoot ball\nPress x to turn on easy mode\nIf you kill a green block you lose", rulesLoc, Color.White);
             sb.End();
             base.Draw(gameTime);
         }

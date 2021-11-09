@@ -156,7 +156,7 @@ namespace MonoGameLibrary.Sprite
                 SpriteEffects,
                 0);
         
-            DrawMarkers(sb);
+            //DrawMarkers(sb);
         }
 
         public void DrawMarkers(SpriteBatch sb)

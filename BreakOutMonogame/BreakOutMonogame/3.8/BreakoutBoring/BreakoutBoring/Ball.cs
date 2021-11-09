@@ -18,6 +18,8 @@ namespace BreakoutBoring
     {
         public BallState State { get; private set; }
         public bool autopaddle;
+        public bool lost;
+
         GameConsole console;
         ScoreManager sc;
 
@@ -41,6 +43,8 @@ namespace BreakoutBoring
             this.addspeed = 50;
             this.previousspeed = speed;
             this.autopaddle = false;
+            lost = false;
+
             this.sc = sc;
             this.startinglocation = new Vector2();
             //Lazy load GameConsole
@@ -82,6 +86,11 @@ namespace BreakoutBoring
             this.State =  BallState.OnPaddleStart;
             //this.console.GameConsoleWrite("Ball Reset " + gameTime.TotalGameTime.ToString());
             sc.Lives--;
+
+            if (sc.Lives == 0)
+            {
+                lost = true;
+            }
         }
 
         public override void Update(GameTime gameTime)

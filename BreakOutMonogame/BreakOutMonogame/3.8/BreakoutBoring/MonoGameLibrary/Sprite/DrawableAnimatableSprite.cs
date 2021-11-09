@@ -120,7 +120,7 @@ namespace MonoGameLibrary.Sprite
                 0);
             
 
-            base.DrawMarkers(spriteBatch);
+            //base.DrawMarkers(spriteBatch);
 
             spriteBatch.End();
             //base.Draw(gameTime);
